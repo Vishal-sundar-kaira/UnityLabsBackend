@@ -1,0 +1,73 @@
+Step 1: Navigate to the directory and execute npm install.
+
+Step 2: Start the backend using either node index.js or nodemon index.js.
+
+Step 3: Utilize any tool to verify if the backend is operational or not (I used Thunder Client).
+
+Flow of the API (Sample to Verify API Faster):
+
+1.Both Seller and Buyer will Register (http://localhost:5000/api/user/register)post
+  For Buyer:
+	{
+  	"username":"vishalk",
+ 	"password":"vishal"
+	}
+  For Seller:
+	{
+  	"username":"nidhik",
+  	"password":"nidhi",
+  	"isSeller":true
+	}
+2.Login as buyer or seller (http://localhost:5000/api/user/login)post
+  For Buyer:
+	{
+  	"username":"vishalk",
+ 	"password":"vishal"
+	}
+  For Seller:
+	{
+  	"username":"nidhik",
+  	"password":"nidhi"
+	}
+An AuthToken will be created and stored in cookies. For further queries, in the header, 
+put key: Cookie, value: accessToken=<Tokenvalue>.
+
+3.Create Product as a seller (http://localhost:5000/api/seller/create-product)post
+Add two products one by one
+{
+  "name":"Chair",
+  "price":100
+}
+
+{
+  "name":"Cupboard",
+  "price":1000
+}
+
+4.Seller can create catlog by selecting its product (http://localhost:5000/api/seller/create-catalog)post
+{
+  "products":[
+    {
+      "_id":"product id 1"
+    },
+    {
+      "_id":"product id 2"
+    }
+    ]
+}
+5.buyer can view all products by getproduct (http://localhost:5000/api/buyer/get-product) get
+6.Buyer can view each seller catalog with its id (http://localhost:5000/api/buyer/seller-catalog/:seller_id)get
+7.Buyer can create orders of list of items of one seller (http://localhost:5000/api/buyer/create-order/6575b5205f266db60b281f23)
+{
+  "items":[
+    {
+      "_id":"product id 1"
+    },
+    {
+      "_id": "product id 2"
+    }
+    ]
+}
+8.Buyer can get list of seller(http://localhost:5000/api/buyer/list-of-sellers)get
+9.Seller can check all its order(http://localhost:5000/api/seller/orders)get
+(With this API, the whole backend is ready, and now buyers and sellers can easily complete their orders.)
