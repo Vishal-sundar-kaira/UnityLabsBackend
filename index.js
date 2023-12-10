@@ -35,9 +35,10 @@ app.use((err, req, res, next) => {
 
 // Routes
 const userRoutes = require('./routes/userRoutes');
+const productRoutes = require('./routes/productRoutes');
 
 app.use('/api/user', userRoutes);
-
+app.use('/api/product', productRoutes);
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
