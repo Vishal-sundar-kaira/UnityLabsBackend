@@ -33,6 +33,10 @@ app.use((err, req, res, next) => {
   return res.status(errorStatus).send(errorMessage);
 });
 
+// Routes
+const userRoutes = require('./routes/userRoutes');
+
+app.use('/api/user', userRoutes);
 
 const PORT = process.env.PORT || 5000;
 
