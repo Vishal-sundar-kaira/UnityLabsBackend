@@ -30,36 +30,35 @@ exports.getSellerCatalog = async (req, res) => {
 };
 
 exports.createOrder = async (req, res) => {
-  try {
-    const { seller_id } = req.params;
-    const { items } = req.body;
-
-    const seller = await User.findById(seller_id);
-    if (!seller || !seller.isSeller) {
-      return res.status(404).json({ error: 'Seller not found' });
+    try {
+      const { seller_id } = req.params;
+      const { items } = req.body;
+  
+      const seller = await User.findById(seller_id);
+      if (!seller || !seller.isSeller) {
+        return res.status(404).json({ error: 'Seller not found' });
+      }
+  
+      const productIds = items.map(item => item._id);
+      const products = await Product.find({ _id: { $in: productIds }, seller: seller_id });
+  
+      if (products.length !== items.length) {
+        return res.status(404).json({ error: 'One or more products not found' });
+      }
+  
+      const order = new Order({
+        buyer: req.userId,
+        products: productIds,
+        seller:seller_id
+      });
+  
+      await order.save();
+      res.status(201).json({ message: 'Order created successfully', order });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Internal Server Error' });
     }
-    if(req.isSeller){
-        return res.status(404).json({error:"Seller cant create order"});
-    }
-    const productIds = items.map(item => item._id);
-    const products = await Product.find({ _id: { $in: productIds } });
-    
-    if (products.length !== items.length) {
-      return res.status(404).json({ error: 'One or more products not found' });
-    }
-
-    const order = new Order({
-      buyer: req.userId,
-      products: productIds,
-    });
-
-    await order.save();
-    res.status(201).json({ message: 'Order created successfully', order });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Internal Server Error' });
-  }
-};
+  };
 
 exports.getProducts = async (req, res) => {
     try {

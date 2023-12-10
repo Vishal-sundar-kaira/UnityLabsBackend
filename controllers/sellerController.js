@@ -50,24 +50,25 @@ exports.createProduct = async (req, res) => {
       res.status(500).json({ error: 'Internal Server Error' });
     }
   };
-exports.getOrders = async (req, res) => {
-  try {
-    // Check if the user is a seller
-    if (!req.isSeller) {
-      return res.status(403).json({ error: 'Access forbidden. Only sellers can view orders.' });
+
+  exports.getOrders = async (req, res) => {
+    try {
+      // Check if the user is a seller
+      if (!req.isSeller) {
+        return res.status(403).json({ error: 'Access forbidden. Only sellers can view orders.' });
+      }
+  
+      // Get a list of orders received by the seller
+      const orders = await Order.find({ seller: req.userId })
+        .populate({
+          path: 'products',
+          select: 'name price',
+        })
+        .exec();
+  
+      res.status(200).json({ message: 'List of orders retrieved successfully', orders });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Internal Server Error' });
     }
-
-    // Get a list of orders received by the seller
-    const orders = await Order.find({ 'products.seller': req.userId })
-      .populate({
-        path: 'products.product',
-        select: 'name price',
-      })
-      .exec();
-
-    res.status(200).json({ message: 'List of orders retrieved successfully', orders });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Internal Server Error' });
-  }
-};
+  };
