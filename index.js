@@ -35,10 +35,12 @@ app.use((err, req, res, next) => {
 
 // Routes
 const userRoutes = require('./routes/userRoutes');
-const productRoutes = require('./routes/productRoutes');
+const buyerRoutes = require('./routes/buyerRoutes');
+const sellerRoutes = require('./routes/sellerRoute');
 
 app.use('/api/user', userRoutes);
-app.use('/api/product', productRoutes);
+app.use('/api/buyer', buyerRoutes);
+app.use('/api/seller', sellerRoutes);
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
