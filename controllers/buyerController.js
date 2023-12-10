@@ -38,8 +38,10 @@ exports.createOrder = async (req, res) => {
     if (!seller || !seller.isSeller) {
       return res.status(404).json({ error: 'Seller not found' });
     }
-
-    const productIds = items.map(item => item.productId);
+    if(req.isSeller){
+        return res.status(404).json({error:"Seller cant create order"});
+    }
+    const productIds = items.map(item => item._id);
     const products = await Product.find({ _id: { $in: productIds } });
     
     if (products.length !== items.length) {
@@ -47,7 +49,7 @@ exports.createOrder = async (req, res) => {
     }
 
     const order = new Order({
-      buyer: req.user.id,
+      buyer: req.userId,
       products: productIds,
     });
 

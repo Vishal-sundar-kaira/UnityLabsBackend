@@ -39,6 +39,7 @@ exports.createProduct = async (req, res) => {
       const newProduct = new Product({
         name,
         price,
+        seller: req.userId,
       });
   
       await newProduct.save();
