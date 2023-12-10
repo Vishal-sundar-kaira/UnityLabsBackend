@@ -12,4 +12,6 @@ router.get('/seller-catalog/:seller_id', authMiddleware.verifytoken, buyerContro
 // Create an order for a specific seller
 router.post('/create-order/:seller_id', authMiddleware.verifytoken, buyerController.createOrder);
 
+//get products
+router.get('/get-product', authMiddleware.verifytoken, buyerController.getProducts);
 module.exports = router;
